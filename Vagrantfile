@@ -1,4 +1,4 @@
-# definios um array contendo as máquinas
+# array das máquinas a serem provisionadas
 servers = [
     {
         :name => "k8s-head",

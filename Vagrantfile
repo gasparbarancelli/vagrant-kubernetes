@@ -77,6 +77,12 @@ $configureNode = <<-SCRIPT
     apt-get install -y sshpass
     sshpass -p "vagrant" scp -o StrictHostKeyChecking=no vagrant@192.168.2.111:/etc/kubeadm_join_cmd.sh .
     sh ./kubeadm_join_cmd.sh
+    # https://github.com/projectcalico/calicoctl/issues/426
+    sudo iptables -t nat -N EXTERNAL
+    sudo iptables -t nat -A POSTROUTING -j EXTERNAL 
+    sudo iptables -t nat -A EXTERNAL -s 172.17.0.1/16 -d 172.17.0.1/16 -j RETURN
+    sudo iptables -t nat -A EXTERNAL -s 172.17.0.1/16 -d 192.168.1.1/24 -j RETURN
+    sudo iptables -t nat -A EXTERNAL -j MASQUERADE
 SCRIPT
 
 #provisiona as máquinas virtuais
